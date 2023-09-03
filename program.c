@@ -23,6 +23,42 @@ void board()
 	printf("\t|\t|\t\n\n");
 }
 
+void reset()
+{
+	int i;
+	
+	for (i=0;i<9;i++)
+	{
+		position[i] = ' ';
+	}
+	
+	system("cls");
+}
+
+void asktoplay()
+{
+	char askplay[100];
+	printf("Play again? (y/n): ");
+	scanf("%s", askplay);
+	char *p = askplay;
+	
+	if ((*p=='Y') || (*p=='y'))
+	{
+		conplay = true;
+		reset();
+	}
+	else if ((*p=='N') || (*p=='n'))
+	{
+		printf("Bye!\n\n");
+		conplay = false;
+	}
+	else
+	{
+		printf("Error!\n\n");
+		asktoplay();
+	}
+}
+
 void checkwin()
 {
 	if (((position[0]=='x') && (position[1]=='x') && (position[2]=='x')) || 
@@ -35,6 +71,7 @@ void checkwin()
 		((position[2]=='x') && (position[4]=='x') && (position[6]=='x')) ) 
 	{
 		printf("Player win!\n\n");
+		asktoplay();
 		
 	}
 	else if (((position[0]=='o') && (position[1]=='o') && (position[2]=='o')) || 
@@ -47,18 +84,20 @@ void checkwin()
 			 ((position[2]=='o') && (position[4]=='o') && (position[6]=='o')) ) 
 	{
 		printf("Bot win!\n\n");
+		asktoplay();
 	}
-	else if (position[0] != ' ' && 
-			 position[1] != ' ' && 
-			 position[2] != ' ' && 
-			 position[3] != ' ' && 
-			 position[4] != ' ' && 
-			 position[5] != ' ' && 
-			 position[6] != ' ' && 
-			 position[7] != ' ' && 
-			 position[8] != ' ')
+	else if (position[0]!= ' ' && 
+			 position[1]!= ' ' && 
+			 position[2]!= ' ' && 
+			 position[3]!= ' ' && 
+			 position[4]!= ' ' && 
+			 position[5]!= ' ' && 
+			 position[6]!= ' ' && 
+			 position[7]!= ' ' && 
+			 position[8]!= ' ')
 	{
 		printf("Game draw!\n\n");
+		asktoplay();
 	}
 	else 
 	{
@@ -66,10 +105,23 @@ void checkwin()
 	}
 }
 
+void botMove()
+{
+	int bot;
+	bot = rand() % 8;
+	if ((position[bot]=='x') || (position[bot]=='o')) 
+	{
+		botMove();
+	} 
+	else 
+	{
+		position[bot] = 'o';
+	}
+}
+
 main() 
 {
 	int pos;
-	
 	while (conplay) 
 	{
 		printf("Position (1-9): ");
@@ -77,13 +129,14 @@ main()
 		
 		if ((pos>=1) && (pos<=9)) 
 		{
-			if ((position[pos-1]=='x') || (position[pos]-1=='o')) 
+			if ((position[pos-1]=='x') || (position[pos-1]=='o')) 
 			{
 				printf("This position is not available!\n\n");
 			} 
 			else 
 			{
 				position[pos-1] = 'x';
+				botMove();
 				board();
 				checkwin();
 			}
@@ -92,6 +145,7 @@ main()
 		{
 			printf("There are only 1-9 positions\n\n");
 		}
+		
 	}
 	
 	return 0;
