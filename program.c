@@ -105,6 +105,31 @@ void checkwin()
 	}
 }
 
+void playerMove()
+{
+	int pos;
+	printf("Position (1-9): ");
+	scanf("%d", &pos);
+		
+	if ((pos>=1) && (pos<=9)) 
+	{
+		if ((position[pos-1]=='x') || (position[pos-1]=='o')) 
+		{
+			printf("This position is not available!\n\n");
+			playerMove();
+		} 
+		else 
+		{
+			position[pos-1] = 'x';
+		}
+	} 
+	else 
+	{
+		printf("There are only 1-9 positions\n\n");
+		playerMove();
+	}
+}
+
 void botMove()
 {
 	int bot;
@@ -121,31 +146,14 @@ void botMove()
 
 main() 
 {
-	int pos;
 	while (conplay) 
 	{
-		printf("Position (1-9): ");
-		scanf("%d", &pos);
-		
-		if ((pos>=1) && (pos<=9)) 
-		{
-			if ((position[pos-1]=='x') || (position[pos-1]=='o')) 
-			{
-				printf("This position is not available!\n\n");
-			} 
-			else 
-			{
-				position[pos-1] = 'x';
-				botMove();
-				board();
-				checkwin();
-			}
-		} 
-		else 
-		{
-			printf("There are only 1-9 positions\n\n");
-		}
-		
+		botMove();
+		board();
+		checkwin();
+		playerMove();
+		board();
+		checkwin();
 	}
 	
 	return 0;
